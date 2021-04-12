@@ -19,10 +19,10 @@ public class Game {
     };
 
     private static final float[] colors = {
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 0.0f,
+            0.24f, 0f, 0.6f,
+            0.24f, 0f, 0.6f,
+            0.24f, 0f, 0.6f,
+            0.24f, 0f, 0.6f,
     };
 
     private static final int[] indices = {
@@ -36,9 +36,8 @@ public class Game {
     private static int colorsId;
     private static int uniformMatrixLocation;
 
-    private static Matrix4f matrix = new Matrix4f()
-            .identity()
-            .translate(0.25f, 0.25f, 0.25f);
+    private static Matrix4f matrix = new Matrix4f().identity().scale(0.25f);
+    private static Matrix4f matrix2 = new Matrix4f().identity();
     // 4x4 -> FloatBuffer of size 16
     private static FloatBuffer matrixFloatBuffer = BufferUtils.createFloatBuffer(16);
 
@@ -113,15 +112,22 @@ public class Game {
     }
 
     public static void update(long window) {
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS) {
-            matrix = matrix.translate(0.01f, 0f, 0f);
-        } if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS) {
-            matrix = matrix.translate(-0.01f, 0f, 0f);
+        if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS) {
+            matrix = matrix.translate(0.05f, 0f, 0f);
+        }
+        if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS) {
+            matrix = matrix.translate(-0.05f, 0f, 0f);
+        }
+        if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS) {
+            matrix = matrix.translate(0f, 0.05f, 0f);
+        }
+        if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS) {
+            matrix = matrix.translate(0, -0.05f, 0f);
         }
 
-        // TODO: Send to GPU only if position updated
         matrix.get(matrixFloatBuffer);
         GL33.glUniformMatrix4fv(uniformMatrixLocation, false, matrixFloatBuffer);
+        // TODO: Send to GPU only if position updated
     }
 
 }
